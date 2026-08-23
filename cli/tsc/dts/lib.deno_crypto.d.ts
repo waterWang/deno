@@ -193,6 +193,22 @@ interface Pbkdf2Params extends Algorithm {
 }
 
 /** @category Crypto */
+interface Argon2Params extends Algorithm {
+  /** Memory cost to use, in kibibytes. */
+  memory: number;
+  /** Number of iterations. */
+  passes: number;
+  /** Degree of parallelism. */
+  parallelism: number;
+  /** Salt for the derivation. */
+  nonce: BufferSource;
+  /** Optional secret value (a.k.a. pepper). */
+  secretValue?: BufferSource;
+  /** Optional associated data. */
+  associatedData?: BufferSource;
+}
+
+/** @category Crypto */
 interface AesDerivedKeyParams extends Algorithm {
   length: number;
 }
@@ -560,6 +576,7 @@ interface SubtleCrypto {
       | AlgorithmIdentifier
       | HkdfParams
       | Pbkdf2Params
+      | Argon2Params
       | EcdhKeyDeriveParams,
     baseKey: CryptoKey,
     length: number,
@@ -583,6 +600,7 @@ interface SubtleCrypto {
       | AlgorithmIdentifier
       | HkdfParams
       | Pbkdf2Params
+      | Argon2Params
       | EcdhKeyDeriveParams,
     baseKey: CryptoKey,
     derivedKeyType:
