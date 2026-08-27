@@ -243,7 +243,7 @@ async fn handshake_websocket(
 
   match h1res {
     Ok(res) => Ok(res),
-    Err(_) if scheme == "https" => {
+    Err(_) if scheme == "https" && client.http2_enabled() => {
       let uri = Uri::builder()
         .scheme(scheme)
         .authority(authority)
