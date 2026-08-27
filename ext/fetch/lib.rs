@@ -1207,6 +1207,7 @@ pub fn create_http_client(
     inner: decompress,
     connector,
     user_agent,
+    http2_enabled: options.http2,
   })
 }
 
@@ -1220,6 +1221,7 @@ pub struct Client {
   inner: DecompressionService<FetchClient>,
   connector: Connector,
   user_agent: HeaderValue,
+  http2_enabled: bool,
 }
 
 type FetchClient = retry::Retry<
@@ -1403,6 +1405,17 @@ pub enum ClientConnectError {
 }
 
 impl Client {
+  /// Whether this client was created with HTTP/2 support enabled.
+  ///
+  /// Set from `CreateHttpClientOptions::http2` (i.e.
+  /// `Deno.createHttpClient({ http2 })`). Consumers that need to pick between
+  /// an HTTP/1.1 and an HTTP/2 handshake (e.g. the WebSocket client) can use
+  /// this to avoid attempting an HTTP/2 connection the client was explicitly
+  /// configured to never use.
+  pub fn http2_enabled(&self) -> bool {
+    self.http2_enabled
+  }
+
   pub async fn connect(
     &self,
     uri: Uri,
